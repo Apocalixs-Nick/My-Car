@@ -13,7 +13,7 @@ data class MyCar (
     @ColumnInfo(name = "brand")
     val brand: String,
     @ColumnInfo(name = "power")
-    val power: String,
+    val power: Int,
     @ColumnInfo(name = "number_doors")
     val numberDoors: Int,
     @ColumnInfo(name = "production_year")
