@@ -39,7 +39,14 @@ class CarViewModel(private val myCarDao: MyCarDao) : ViewModel() {
     /**
      * Function for update a car
      */
-    fun updateCar(id:Long, name: String, brand: String, power: Int, numberDoors: Int, productionYear: Int) {
+    fun updateCar(
+        id: Long,
+        name: String,
+        brand: String,
+        power: Int,
+        numberDoors: Int,
+        productionYear: Int
+    ) {
 
         val car = MyCar(
             id = id,
@@ -62,6 +69,46 @@ class CarViewModel(private val myCarDao: MyCarDao) : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             myCarDao.delete(car)
         }
+    }
+
+
+    fun isValidEntry(
+        name: String,
+        brand: String,
+        power: Int,
+        numberDoors: Int,
+        productionYear: Int
+    ): Boolean {
+        var state: Boolean
+        if (name.isNotBlank()) {
+            if (brand.isNotBlank()) {
+                state = isValidEntryInt(power,numberDoors,productionYear)
+            } else {
+                state = false
+            }
+        } else {
+            state = false
+        }
+        return state
+    }
+
+
+    fun isValidEntryInt(power: Int, numberDoors: Int, productionYear: Int): Boolean {
+        var state: Boolean
+        if (power != 0) {
+            if (numberDoors != 0) {
+                if (productionYear != 0) {
+                        state = true
+                } else {
+                        state = false
+                }
+            } else {
+                state = false
+            }
+        } else {
+            state = false
+        }
+        return state
     }
 }
 
