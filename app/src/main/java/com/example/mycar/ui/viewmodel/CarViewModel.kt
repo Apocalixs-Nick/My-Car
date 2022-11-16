@@ -1,12 +1,10 @@
 package com.example.mycar.ui.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.*
 import com.example.mycar.data.MyCarDao
 import com.example.mycar.model.MyCar
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class CarViewModel(private val myCarDao: MyCarDao) : ViewModel() {
 
@@ -70,7 +68,7 @@ class CarViewModel(private val myCarDao: MyCarDao) : ViewModel() {
 
 class CarViewModelFactory(private val myCarDao: MyCarDao) :
     ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(CarViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return CarViewModel(myCarDao) as T

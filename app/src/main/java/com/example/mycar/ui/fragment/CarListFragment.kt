@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.mycar.BaseApplication
+import com.example.mycar.R
+import com.example.mycar.databinding.FragmentCarListBinding
 import com.example.mycar.ui.adapter.CarListAdapter
 import com.example.mycar.ui.viewmodel.CarViewModel
 import com.example.mycar.ui.viewmodel.CarViewModelFactory
@@ -27,7 +29,7 @@ class CarListFragment : Fragment() {
     }
 
     //to review
-    private var _binding: CarListFragment? = null
+    private var _binding: FragmentCarListBinding? = null
 
     private val binding get() = _binding!!
 
@@ -36,7 +38,7 @@ class CarListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding = CarListFragment.inflate(inflater, container, false)
+        _binding = FragmentCarListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -44,7 +46,8 @@ class CarListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val adapter = CarListAdapter { car ->
-            val action = CarListFragmentDirections.action
+            val action = CarListFragmentDirections
+                .actionCarListFragmentToCarDetailFragment()
             findNavController().navigate(action)
         }
 
@@ -55,7 +58,12 @@ class CarListFragment : Fragment() {
         }
 
         binding.apply {
-
+            recyclerView.adapter = adapter
+            addCar.setOnClickListener {
+                findNavController().navigate(
+                    R.id.action_carListFragment_to_addCarFragment
+                )
+            }
         }
     }
 

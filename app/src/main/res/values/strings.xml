@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">MyCar</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="detail_car">Details Car</string>
+    <string name="information_car">Car data implementation</string>
     <string name="name_model">Name Model</string>
     <string name="brand">Brand</string>
     <string name="power_kw">Power(kW)</string>

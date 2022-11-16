@@ -8,8 +8,8 @@
     <fragment
         android:id="@+id/carListFragment"
         android:name="com.example.mycar.ui.fragment.CarListFragment"
-        android:label="fragment_car_list"
-        tools:layout="@layout/fragment_car_list" >
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_car_list">
         <action
             android:id="@+id/action_carListFragment_to_carDetailFragment"
             app:destination="@id/carDetailFragment" />
@@ -20,19 +20,26 @@
     <fragment
         android:id="@+id/carDetailFragment"
         android:name="com.example.mycar.ui.fragment.CarDetailFragment"
-        android:label="fragment_car_detail"
-        tools:layout="@layout/fragment_car_detail" >
+        android:label="@string/detail_car"
+        tools:layout="@layout/fragment_car_detail">
         <action
             android:id="@+id/action_carDetailFragment_to_addCarFragment"
             app:destination="@id/addCarFragment" />
+        <argument
+            android:name="id"
+            app:argType="long"
+            android:defaultValue="0L" />
     </fragment>
     <fragment
         android:id="@+id/addCarFragment"
         android:name="com.example.mycar.ui.fragment.AddCarFragment"
-        android:label="fragment_add_car"
-        tools:layout="@layout/fragment_add_car" >
+        android:label="@string/information_car"
+        tools:layout="@layout/fragment_add_car">
         <action
             android:id="@+id/action_addCarFragment_to_carListFragment"
             app:destination="@id/carListFragment" />
+        <argument android:name="id"
+            app:argType="long"
+            android:defaultValue="0L" />
     </fragment>
 </navigation>

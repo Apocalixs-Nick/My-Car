@@ -5,12 +5,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import com.example.mycar.BaseApplication
 import com.example.mycar.R
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import com.example.mycar.databinding.FragmentCarDetailBinding
+import com.example.mycar.model.MyCar
+import com.example.mycar.ui.viewmodel.CarViewModel
+import com.example.mycar.ui.viewmodel.CarViewModelFactory
 
 /**
  * A simple [Fragment] subclass.
@@ -18,43 +22,111 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class AddCarFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+    private val navigation: AddCarFragmentArgs by navArgs()
+
+    private val viewModel: CarViewModel by activityViewModels {
+        CarViewModelFactory(
+            (activity?.application as BaseApplication).database.myCarDao()
+        )
     }
+
+    private lateinit var car: MyCar
+
+    private var _binding: FragmentCarDetailBinding? = null
+
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_car, container, false)
+        _binding = FragmentCarDetailBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AddCarFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AddCarFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val id = navigation.id
+        if (id > 0) {
+            viewModel.retrieveCar(id).observe(this.viewLifecycleOwner) { selectCar ->
+                car = selectCar
+                bindCar(car)
             }
+
+            binding.deleteBtn.visibility = View.VISIBLE
+            binding.deleteBtn.setOnClickListener {
+                deleteCar(car)
+            }
+        } else {
+            binding.saveBtn.setOnClickListener {
+                addCar()
+            }
+        }
+    }
+
+    private fun addCar() {
+        if (isValidEntry()) {
+            viewModel.addCar(
+                binding.nameCarInput.text.toString(),
+                binding.brandCarInput.text.toString(),
+                binding.doorCarInput.text.toString(),
+                binding.powerCarInput.text.toString(),
+                binding.yearCarInput.text.toString()
+            )
+            findNavController().navigate(
+                R.id.action_addCarFragment_to_carListFragment
+            )
+        }
+    }
+
+    private fun updateCar() {
+        if (isValidEntry()) {
+            viewModel.updateCar(
+                id = navigation.id,
+                name = binding.nameCarInput.text.toString(),
+                brand = binding.brandCarInput.text.toString(),
+                numberDoors = binding.doorCarInput.text.toString(),
+                power = binding.powerCarInput.text.toString(),
+                productionYear = binding.yearCarInput.text.toString()
+            )
+            findNavController().navigate(
+                R.id.action_addCarFragment_to_carListFragment
+            )
+        }
+    }
+
+    private fun isValidEntry(): Boolean {
+        binding.nameCarInput.text.toString(),
+        binding.brandCarInput.text.toString(),
+        binding.doorCarInput.text.toString(),
+        binding.powerCarInput.text.toString(),
+        binding.yearCarInput.text.toString()
+    }
+
+    private fun deleteCar(car: MyCar) {
+        viewModel.deleteCar(car)
+        findNavController().navigate(
+            R.id.action_addCarFragment_to_carListFragment
+        )
+    }
+
+    private fun bindCar(car: MyCar) {
+        binding.apply {
+            nameCarInput.setText(car.name, TextView.BufferType.SPANNABLE)
+            brandCarInput.setText(car.brand, TextView.BufferType.SPANNABLE)
+            doorCarInput.setText(car.numberDoors, TextView.BufferType.SPANNABLE)
+            powerCarInput.setText(car.power, TextView.BufferType.SPANNABLE)
+            yearCarInput.setText(car.productionYear, TextView.BufferType.SPANNABLE)
+            saveBtn.setOnClickListener {
+                updateCar()
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

@@ -5,12 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.navArgs
+import com.example.mycar.BaseApplication
 import com.example.mycar.R
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import com.example.mycar.databinding.FragmentCarDetailBinding
+import com.example.mycar.model.MyCar
+import com.example.mycar.ui.adapter.CarListAdapter
+import com.example.mycar.ui.viewmodel.CarViewModel
+import com.example.mycar.ui.viewmodel.CarViewModelFactory
 
 /**
  * A simple [Fragment] subclass.
@@ -18,43 +21,48 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class CarDetailFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+    private val navigation: CarDetailFragmentArgs by navArgs()
+
+    private val viewModel: CarViewModel by activityViewModels {
+        CarViewModelFactory(
+            (activity?.application as BaseApplication).database.myCarDao()
+        )
     }
+
+    private lateinit var car: MyCar
+
+    private var _binding: FragmentCarDetailBinding? = null
+
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_car_detail, container, false)
+        _binding = FragmentCarDetailBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment CarDetailFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            CarDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val id = navigation.id
+
+        viewModel.retrieveCar(id).observe(this.viewLifecycleOwner) { selectCar ->
+            car = selectCar
+            bindCar()
+        }
+    }
+
+    private fun bindCar() {
+        binding.apply {
+            nameCar.text = car.name
+            brandCar.text = car.brand
+            powerCar.text = car.power.toString()
+            doorCar.text = car.numberDoors.toString()
+            yearCar.text = car.productionYear.toString()
+        }
     }
 }
