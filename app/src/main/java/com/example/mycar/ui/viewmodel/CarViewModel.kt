@@ -21,14 +21,14 @@ class CarViewModel(private val myCarDao: MyCarDao) : ViewModel() {
     /**
      * Function for add a new car
      */
-    fun addCar(name: String, brand: String, power: Int, numberDoors: Int, productionYear: Int) {
+    fun addCar(name: String, brand: String, power: String, numberDoors: String, productionYear: String) {
 
         val car = MyCar(
             name = name,
             brand = brand,
-            power = power,
-            numberDoors = numberDoors,
-            productionYear = productionYear
+            power = power.toInt(),
+            numberDoors = numberDoors.toInt(),
+            productionYear = productionYear.toInt()
         )
 
         viewModelScope.launch {
@@ -43,18 +43,18 @@ class CarViewModel(private val myCarDao: MyCarDao) : ViewModel() {
         id: Long,
         name: String,
         brand: String,
-        power: Int,
-        numberDoors: Int,
-        productionYear: Int
+        power: String,
+        numberDoors: String,
+        productionYear: String
     ) {
 
         val car = MyCar(
             id = id,
             name = name,
             brand = brand,
-            power = power,
-            numberDoors = numberDoors,
-            productionYear = productionYear
+            power = power.toInt(),
+            numberDoors = numberDoors.toInt(),
+            productionYear = productionYear.toInt()
         )
 
         viewModelScope.launch {
@@ -74,26 +74,17 @@ class CarViewModel(private val myCarDao: MyCarDao) : ViewModel() {
 
     fun isValidEntry(
         name: String,
-        brand: String,
-        power: Int,
-        numberDoors: Int,
-        productionYear: Int
+        brand: String, power: String, numberDoors: String, productionYear: String
     ): Boolean {
-        var state: Boolean
-        if (name.isNotBlank()) {
-            if (brand.isNotBlank()) {
-                state = isValidEntryInt(power,numberDoors,productionYear)
-            } else {
-                state = false
-            }
-        } else {
-            state = false
+
+        if (name.isBlank() || brand.isBlank() || power.isBlank() || numberDoors.isBlank() || productionYear.isBlank()) {
+            return false
         }
-        return state
+        return true
     }
 
 
-    fun isValidEntryInt(power: Int, numberDoors: Int, productionYear: Int): Boolean {
+    /*fun isValidEntryInt(power: Int, numberDoors: Int, productionYear: Int): Boolean {
         var state: Boolean
         if (power != 0) {
             if (numberDoors != 0) {
@@ -109,7 +100,7 @@ class CarViewModel(private val myCarDao: MyCarDao) : ViewModel() {
             state = false
         }
         return state
-    }
+    }*/
 }
 
 

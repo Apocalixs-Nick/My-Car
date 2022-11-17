@@ -97,15 +97,21 @@ class AddCarFragment : Fragment() {
         }
     }
 
-    private fun isValidEntry() = viewModel.isValidEntry {
-            binding.nameCarInput.text.toString()
-            binding.brandCarInput.text.toString()
-        if (viewModel.isValidEntryInt()) {
+    private fun isValidEntry(): Boolean {
+        return viewModel.isValidEntry(
+            binding.nameCarInput.text.toString(),
+            binding.brandCarInput.text.toString(),
+            binding.doorsCarInput.text.toString(),
+            binding.powerCarInput.text.toString(),
+            binding.yearCarInput.text.toString()
+        )
+    }
+
+    /*private fun isValidEntryInt() = viewModel.isValidEntryInt {
             binding.doorsCarInput.text.toString()
             binding.powerCarInput.text.toString()
             binding.yearCarInput.text.toString()
-        }
-    }
+    }*/
 
     private fun deleteCar(car: MyCar) {
         viewModel.deleteCar(car)
