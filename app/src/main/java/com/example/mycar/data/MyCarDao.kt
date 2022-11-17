@@ -11,9 +11,9 @@ interface MyCarDao {
     @Query("SELECT * from my_car_database WHERE id = :id")
     fun getCar(id: Long): Flow<MyCar>
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(myCar: MyCar)
+    fun insert(myCar: MyCar)
     @Update
-    suspend fun update(myCar: MyCar)
+    fun update(myCar: MyCar)
     @Delete
-    suspend fun delete(myCar: MyCar)
+    fun delete(myCar: MyCar)
 }

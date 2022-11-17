@@ -66,14 +66,15 @@ class AddCarFragment : Fragment() {
         }
     }
 
+    //to review
     private fun addCar() {
         if (isValidEntry()) {
             viewModel.addCar(
                 binding.nameCarInput.text.toString(),
                 binding.brandCarInput.text.toString(),
-                binding.doorsCarInput.text.toString(),
-                binding.powerCarInput.text.toString(),
-                binding.yearCarInput.text.toString()
+                binding.powerCarInput.inputType,
+                binding.doorsCarInput.text.toString().toInt(),
+                binding.yearCarInput.text.toString().toInt()
             )
             findNavController().navigate(
                 R.id.action_addCarFragment_to_carListFragment
@@ -81,15 +82,16 @@ class AddCarFragment : Fragment() {
         }
     }
 
+    //to review
     private fun updateCar() {
         if (isValidEntry()) {
             viewModel.updateCar(
                 id = navigation.id,
                 name = binding.nameCarInput.text.toString(),
                 brand = binding.brandCarInput.text.toString(),
-                numberDoors = binding.doorsCarInput.text.toString(),
-                power = binding.powerCarInput.text.toString(),
-                productionYear = binding.yearCarInput.text.toString()
+                power = binding.powerCarInput.inputType,
+                numberDoors = binding.doorsCarInput.inputType,
+                productionYear = binding.yearCarInput.inputType
             )
             findNavController().navigate(
                 R.id.action_addCarFragment_to_carListFragment
@@ -101,9 +103,9 @@ class AddCarFragment : Fragment() {
         return viewModel.isValidEntry(
             binding.nameCarInput.text.toString(),
             binding.brandCarInput.text.toString(),
-            binding.doorsCarInput.text.toString(),
-            binding.powerCarInput.text.toString(),
-            binding.yearCarInput.text.toString()
+            binding.doorsCarInput.inputType,
+            binding.powerCarInput.inputType,
+            binding.yearCarInput.inputType
         )
     }
 

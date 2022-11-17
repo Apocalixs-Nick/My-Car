@@ -21,14 +21,14 @@ class CarViewModel(private val myCarDao: MyCarDao) : ViewModel() {
     /**
      * Function for add a new car
      */
-    fun addCar(name: String, brand: String, power: String, numberDoors: String, productionYear: String) {
+    fun addCar(name: String, brand: String, power: Int, numberDoors: Int, productionYear: Int) {
 
         val car = MyCar(
             name = name,
             brand = brand,
-            power = power.toInt(),
-            numberDoors = numberDoors.toInt(),
-            productionYear = productionYear.toInt()
+            power = power,
+            numberDoors = numberDoors,
+            productionYear = productionYear
         )
 
         viewModelScope.launch {
@@ -43,18 +43,18 @@ class CarViewModel(private val myCarDao: MyCarDao) : ViewModel() {
         id: Long,
         name: String,
         brand: String,
-        power: String,
-        numberDoors: String,
-        productionYear: String
+        power: Int,
+        numberDoors: Int,
+        productionYear: Int
     ) {
 
         val car = MyCar(
             id = id,
             name = name,
             brand = brand,
-            power = power.toInt(),
-            numberDoors = numberDoors.toInt(),
-            productionYear = productionYear.toInt()
+            power = power,
+            numberDoors = numberDoors,
+            productionYear = productionYear
         )
 
         viewModelScope.launch {
@@ -74,10 +74,10 @@ class CarViewModel(private val myCarDao: MyCarDao) : ViewModel() {
 
     fun isValidEntry(
         name: String,
-        brand: String, power: String, numberDoors: String, productionYear: String
+        brand: String, power: Int, numberDoors: Int, productionYear: Int
     ): Boolean {
 
-        if (name.isBlank() || brand.isBlank() || power.isBlank() || numberDoors.isBlank() || productionYear.isBlank()) {
+        if (name.isBlank() || brand.isBlank() || power!=0 || numberDoors!=0 || productionYear!=0) {
             return false
         }
         return true
