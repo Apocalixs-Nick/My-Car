@@ -1,6 +1,7 @@
 package com.example.mycar.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import com.example.mycar.BaseApplication
 import com.example.mycar.R
+import com.example.mycar.databinding.FragmentAddCarBinding
 import com.example.mycar.databinding.FragmentCarDetailBinding
 import com.example.mycar.model.MyCar
 import com.example.mycar.ui.adapter.CarListAdapter
@@ -40,9 +42,14 @@ class CarDetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        _binding = FragmentCarDetailBinding.inflate(inflater, container, false)
-        return binding.root
+        try {
+            // Inflate the layout for this fragment
+            _binding = FragmentCarDetailBinding.inflate(inflater, container, false)
+            return binding.root
+        } catch (e: Exception) {
+            Log.e("ErrorDetails", "onCreateViewCarDetailsFragment", e);
+            throw e;
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -1,6 +1,7 @@
 package com.example.mycar.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -41,9 +42,15 @@ class AddCarFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        _binding = FragmentAddCarBinding.inflate(inflater, container, false)
-        return binding.root
+        try {
+            // Inflate the layout for this fragment
+            _binding = FragmentAddCarBinding.inflate(inflater, container, false)
+            return binding.root
+        } catch (e: Exception) {
+            Log.e("ErrorAdd", "onCreateViewAddCarFragment", e);
+            throw e;
+        }
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -72,7 +79,7 @@ class AddCarFragment : Fragment() {
             viewModel.addCar(
                 binding.nameCarInput.text.toString(),
                 binding.brandCarInput.text.toString(),
-                binding.powerCarInput.inputType,
+                binding.powerCarInput.text.toString().toInt(),
                 binding.doorsCarInput.text.toString().toInt(),
                 binding.yearCarInput.text.toString().toInt()
             )
@@ -89,9 +96,9 @@ class AddCarFragment : Fragment() {
                 id = navigation.id,
                 name = binding.nameCarInput.text.toString(),
                 brand = binding.brandCarInput.text.toString(),
-                power = binding.powerCarInput.inputType,
-                numberDoors = binding.doorsCarInput.inputType,
-                productionYear = binding.yearCarInput.inputType
+                power = binding.powerCarInput.text.toString().toInt(),
+                numberDoors = binding.doorsCarInput.text.toString().toInt(),
+                productionYear = binding.yearCarInput.text.toString().toInt()
             )
             findNavController().navigate(
                 R.id.action_addCarFragment_to_carListFragment
@@ -103,9 +110,9 @@ class AddCarFragment : Fragment() {
         return viewModel.isValidEntry(
             binding.nameCarInput.text.toString(),
             binding.brandCarInput.text.toString(),
-            binding.doorsCarInput.inputType,
-            binding.powerCarInput.inputType,
-            binding.yearCarInput.inputType
+            binding.doorsCarInput.text.toString().toInt(),
+            binding.powerCarInput.text.toString().toInt(),
+            binding.yearCarInput.text.toString().toInt()
         )
     }
 

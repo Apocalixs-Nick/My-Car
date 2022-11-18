@@ -1,6 +1,7 @@
 package com.example.mycar.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.mycar.BaseApplication
 import com.example.mycar.R
+import com.example.mycar.databinding.FragmentCarDetailBinding
 import com.example.mycar.databinding.FragmentCarListBinding
 import com.example.mycar.ui.adapter.CarListAdapter
 import com.example.mycar.ui.viewmodel.CarViewModel
@@ -28,6 +30,7 @@ class CarListFragment : Fragment() {
         )
     }
 
+
     //to review
     private var _binding: FragmentCarListBinding? = null
 
@@ -37,33 +40,49 @@ class CarListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        _binding = FragmentCarListBinding.inflate(inflater, container, false)
-        return binding.root
+
+        try {
+            // Inflate the layout for this fragment
+            _binding = FragmentCarListBinding.inflate(inflater, container, false)
+            return binding.root
+        } catch (e: Exception) {
+            Log.e("ErrorList", "onCreateViewCarListFragment", e);
+            throw e;
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = CarListAdapter { car ->
-            val action = CarListFragmentDirections
-                .actionCarListFragmentToCarDetailFragment()
-            findNavController().navigate(action)
-        }
 
-        viewModel.allCar.observe(this.viewLifecycleOwner) { cars ->
-            cars.let {
-                adapter.submitList(it)
-            }
-        }
 
-        binding.apply {
-            recyclerView.adapter = adapter
-            addCar.setOnClickListener {
-                findNavController().navigate(
-                    R.id.action_carListFragment_to_addCarFragment
-                )
+        try {
+
+            val adapter = CarListAdapter { car ->
+                val action = CarListFragmentDirections
+                    .actionCarListFragmentToCarDetailFragment(car.id)
+                findNavController().navigate(action)
             }
+
+
+            viewModel.allCar.observe(this.viewLifecycleOwner) { cars ->
+                cars.let {
+                    adapter.submitList(it)
+                }
+            }
+
+            binding.apply {
+                recyclerView.adapter = adapter
+                addCar.setOnClickListener {
+                    findNavController().navigate(
+                        R.id.action_carListFragment_to_addCarFragment
+                    )
+                }
+            }
+
+        } catch (e: Exception) {
+            Log.e("ErrorList", "onViewCreateCarListFragment", e);
+            throw e;
         }
     }
 
